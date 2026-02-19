@@ -20,7 +20,7 @@ export class Screen {
     if (this.zoom > max) this.zoom = max;
   }
 
-  static reframe({x=0, y=0, size: r=1}) {
+  static reframe({x=0, y=0, r=1}) {
     if (!this.ctx) return;
     this.ctx.resetTransform();
     this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);

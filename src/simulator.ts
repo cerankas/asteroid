@@ -32,6 +32,31 @@ export class Simulator {
     }
   }
 
+  eatAndGrow() {
+    const player = this.player;
+    for (const a of this.universe.asteroids) {
+      while (a.distance(player.x, player.y) < a.r + player.r) {
+        const delta = .001 * player.r**2;
+        if (player.r > a.r) {
+          player.r += delta / player.r;
+          a.r -= delta / a.r;
+          if (a.r <= 0) {
+            this.universe.asteroids.splice(this.universe.asteroids.indexOf(a), 1);
+            break;
+          }
+        }
+        else {
+          a.r += delta / a.r;
+          player.r -= delta / player.r;
+          if (player.r < .1) {
+            player.r = .1;
+            break;
+          }
+        }
+      }
+    }
+  }
+
   restrict() {
     for (const a of this.universe.asteroids) {
       const dx = this.player.x - a.x;
