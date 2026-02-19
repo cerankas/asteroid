@@ -6,7 +6,7 @@ export class Control {
   constructor() {
     document.addEventListener('keydown', this.keydown.bind(this));
     document.addEventListener('keyup', this.keyup.bind(this));
-    document.addEventListener('mousemove', this.mousemove.bind(this));
+    document.addEventListener('pointermove', this.pointermove.bind(this));
   }
 
   getDelta() {
@@ -24,7 +24,7 @@ export class Control {
     this.keys[e.key] = false;
   }
 
-  mousemove(e:MouseEvent) {
+  pointermove(e:PointerEvent) {
     if (!e.buttons) return;
     this.delta += e.movementX / window.innerWidth * 2 * 361;
   }
