@@ -26,6 +26,6 @@ export class Control {
 
   mousemove(e:MouseEvent) {
     if (!e.buttons) return;
-    this.delta += e.movementX / 5;
+    this.delta += e.movementX / window.innerWidth * 2 * 361;
   }
 }

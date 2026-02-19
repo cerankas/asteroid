@@ -25,7 +25,6 @@ function animate(t:number) {
     simulator.simulate(dt);
   }
 
-
   if (control.keys.Shift) {
     if (control.keys.ArrowRight) player.x += .1;
     if (control.keys.ArrowLeft)  player.x -= .1;
@@ -45,10 +44,13 @@ function animate(t:number) {
   Screen.reframe(player);
   Screen.clear();
 
-
   universe.draw(ctx);
   player.draw(ctx);
   simulator.drawForces(ctx);
+  // simulator.drawSpectrumSmallRing(ctx);
+  // simulator.drawSpectrumBigRing(ctx);
+  // simulator.drawSpectrumVertical(ctx);
+  simulator.drawSpectrumHorizontal(ctx);
 }
 
 requestAnimationFrame(animate);
