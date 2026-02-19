@@ -4,10 +4,15 @@ export class Screen {
   static zoom = 20;
 
   static {
+    this.resize();
+
+    document.addEventListener('wheel', this.wheel.bind(this));
+    window.addEventListener('resize', this.resize.bind(this));
+  }
+
+  static resize() {
     this.canvas.width = this.canvas.parentElement!.clientWidth;
     this.canvas.height = this.canvas.parentElement!.clientHeight;
-
-    document.addEventListener('wheel', this.wheel.bind(this))
   }
 
   static wheel(e:WheelEvent) {
