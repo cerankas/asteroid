@@ -1,5 +1,6 @@
 import type { Player } from "./player";
 import type { Universe } from "./universe";
+import { deleteArrayItem } from "./utils";
 
 export class Simulator {
   time = 0;
@@ -41,7 +42,7 @@ export class Simulator {
           player.r += delta / player.r;
           a.r -= delta / a.r;
           if (a.r <= 0) {
-            this.universe.asteroids.splice(this.universe.asteroids.indexOf(a), 1);
+            deleteArrayItem(this.universe.asteroids, a);
             break;
           }
         }
@@ -86,101 +87,6 @@ export class Simulator {
       ctx.lineTo(x + dx * r2, y + dy * r2);
       ctx.stroke();
     }
-  }
-
-  drawSpectrumSmallRing(ctx:CanvasRenderingContext2D) {
-    const {x, y, r} = this.player;    
-    const scale = ctx.getTransform().a;
-    
-    const r1 = 1.10 * r;
-    const r2 = 1.23 * r;
-    ctx.lineWidth = r/20;
-  
-    for (let hue = 0; hue < 360; hue++) {
-      const angle = hue * Math.PI / 180;
-      const s = Math.sin(angle);
-      const c = Math.cos(angle);
-      ctx.beginPath();
-      ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
-      ctx.moveTo(x + s * r1, y + c * r1);
-      ctx.lineTo(x + s * r2, y + c * r2);
-      ctx.stroke();
-    }
-    
-    const angle = this.player.hue * Math.PI / 180;
-    const s = Math.sin(angle);
-    const c = Math.cos(angle);
-    ctx.beginPath();
-    ctx.lineWidth = 3 / scale;
-    ctx.strokeStyle = 'black';
-    const R = (r1 + r2) / 2;
-    const rr = (r2 - r1) / 2;
-    ctx.arc(x + s * R, y + c * R, rr, 0, 2*Math.PI);
-    ctx.stroke();
-  }
-
-  drawSpectrumBigRing(ctx:CanvasRenderingContext2D) {
-    const {x, y} = this.player;
-    
-    const scale = ctx.getTransform().a;
-    const size = Math.min(ctx.canvas.width, ctx.canvas.height) / scale / 2;
-    
-    const r1 = size * .9;
-    const r2 = size * .91;
-    ctx.lineWidth = .5 / scale;
-
-    for (let hue = 0; hue < 360; hue++) {
-      const angle = hue * Math.PI / 180;
-      const s = Math.sin(angle);
-      const c = Math.cos(angle);
-      ctx.beginPath();
-      ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
-      ctx.moveTo(x + s * r1, y + c * r1);
-      ctx.lineTo(x + s * r2, y + c * r2);
-      ctx.stroke();
-    }
-    
-    const angle = this.player.hue * Math.PI / 180;
-    const s = Math.sin(angle);
-    const c = Math.cos(angle);
-    ctx.beginPath();
-    ctx.lineWidth = 3 / scale;
-    ctx.strokeStyle = 'white';
-    const R = (r1 + r2) / 2;
-    const rr = (r2 - r1) / 2;
-    ctx.arc(x + s * R, y + c * R, rr, 0, 2*Math.PI);
-    ctx.stroke();
-  }
-
-  drawSpectrumVertical(ctx:CanvasRenderingContext2D) {
-    const width = ctx.canvas.width;
-    const height = ctx.canvas.height;
-
-    const margin = height * .02;
-    const size = margin * 2;
-    const tick = margin / 3;
-
-    ctx.save();
-    ctx.resetTransform();
-
-    const hueToHeight = (hue:number) => margin + hue / 361 * (height - 2 * margin);
-    
-    ctx.lineWidth = height / 300;
-    for (let hue = 0; hue < 361; hue++) {
-      ctx.beginPath();
-      ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
-      ctx.moveTo(width - margin, hueToHeight(hue));
-      ctx.lineTo(width - size, hueToHeight(hue));
-      ctx.stroke();
-    }
-
-    ctx.beginPath();
-    ctx.strokeStyle = `hsl(${this.player.hue}, 100%, 50%)`;
-    ctx.moveTo(width - margin + tick, hueToHeight(this.player.hue));
-    ctx.lineTo(width - size - tick, hueToHeight(this.player.hue));
-    ctx.stroke();
-
-    ctx.restore();
   }
 
   drawSpectrumHorizontal(ctx:CanvasRenderingContext2D) {

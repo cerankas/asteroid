@@ -1,3 +1,5 @@
+import { hueColor } from "./utils";
+
 export class Player {
   x:number;
   y:number;
@@ -30,7 +32,7 @@ export class Player {
   }
 
   draw(ctx:CanvasRenderingContext2D) {
-    ctx.fillStyle = `hsl(${this.hue}, 100%, 50%)`;
+    ctx.fillStyle = hueColor(this.hue);
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
     ctx.fill();

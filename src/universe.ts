@@ -1,14 +1,5 @@
 import { Asteroid } from "./asteroid"
-
-
-function rnd(min:number, max:number|null=null) {
-  if (max == null) {
-    max = min;
-    min = -min;
-  }
-  return min + Math.random() * (max - min);
-}
-
+import { deleteArrayItem, min, rnd } from "./utils";
 
 export class Universe {
   asteroids:Array<Asteroid> = [];

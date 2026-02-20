@@ -48,9 +48,6 @@ function animate(t:number) {
   universe.draw(ctx);
   player.draw(ctx);
   simulator.drawForces(ctx);
-  // simulator.drawSpectrumSmallRing(ctx);
-  // simulator.drawSpectrumBigRing(ctx);
-  // simulator.drawSpectrumVertical(ctx);
   simulator.drawSpectrumHorizontal(ctx);
 }
 

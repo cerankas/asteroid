@@ -1,3 +1,5 @@
+import { hueColor } from "./utils";
+
 export class Asteroid {
   x:number;
   y:number;
@@ -36,8 +38,8 @@ export class Asteroid {
   }
 
   draw(ctx:CanvasRenderingContext2D) {
+    ctx.fillStyle = hueColor(this.hue);
     ctx.beginPath();
-    ctx.fillStyle = `hsl(${this.hue}, 100%, 50%)`;
     ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
     ctx.fill();
   }
