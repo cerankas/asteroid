@@ -33,40 +33,14 @@ export class Simulator {
     }
   }
 
-  eatAndGrow() {
+  consume() {
     const player = this.player;
     for (const a of this.universe.asteroids) {
-      while (a.distance(player.x, player.y) < a.r + player.r) {
-        const delta = .001 * player.r**2;
-        if (player.r > a.r) {
-          player.r += delta / player.r;
-          a.r -= delta / a.r;
-          if (a.r <= 0) {
-            deleteArrayItem(this.universe.asteroids, a);
-            break;
-          }
-        }
-        else {
-          a.r += delta / a.r;
-          player.r -= delta / player.r;
-          if (player.r < .1) {
-            player.r = .1;
-            break;
-          }
-        }
-      }
-    }
-  }
+      if (!player.isColliding(a)) continue;
+      const [consuming, consumed] = (player.r > a.r) ? [player, a] : [a, player];
+      consuming.consume(consumed);
 
-  restrict() {
-    for (const a of this.universe.asteroids) {
-      const dx = this.player.x - a.x;
-      const dy = this.player.y - a.y;
-      const d = Math.hypot(dx,dy);
-      const mind = a.r + this.player.r / 2;
-      if (d > mind) continue;
-      this.player.x = a.x + dx * mind / d;
-      this.player.y = a.y + dy * mind / d;
+      if (a.r <= 0) deleteArrayItem(this.universe.asteroids, a);
     }
   }
 

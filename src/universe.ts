@@ -12,10 +12,10 @@ export class Universe {
     while (this.asteroids.length < count) {
       const x = rnd(size);
       const y = rnd(size);
-      const r = rnd(.5, 1.5);
+      const r = rnd(.25, 1.5);
       const hue = rnd(0, 360);
       
-      const isTooClose = (a:Asteroid) => a.distance(x,y) < 2 * (a.r + r);
+      const isTooClose = (a:Asteroid) => a.distance({x, y}) < 2 * (a.r + r);
 
       if (this.asteroids.some(isTooClose)) continue;
 

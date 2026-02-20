@@ -1,20 +1,28 @@
-import { hueColor } from "./utils";
+import { SpaceObject } from "./spaceObject";
 
-export class Player {
-  x:number;
-  y:number;
-  r:number;
-  vx:number;
-  vy:number;
-  hue:number;
+
+export class Player extends SpaceObject {
+  vx=0;
+  vy=0;
+
+  maxR:number;
+  protectionTimer=0;
 
   constructor({x=0, y=0, r=1, hue=0}) {
-    this.x = x;
-    this.y = y;
-    this.r = r;
-    this.vx = 0;
-    this.vy = 0;
-    this.hue = hue;
+    super({x, y, r, hue});
+    this.maxR = r;
+  }
+
+  canBeReduced() {
+    return super.canBeReduced() && this.r > this.maxR / 2 && !this.protectionTimer;
+  }
+
+  consume(o:SpaceObject) {
+    super.consume(o);
+    if (this.maxR < this.r) {
+      this.maxR = this.r;
+      this.protectionTimer = 0;
+    }
   }
 
   changeHue(delta:number) {
@@ -29,12 +37,27 @@ export class Player {
 
     this.x += this.vx * dt;
     this.y += this.vy * dt;
+
+    if (!this.canBeReduced() && !this.protectionTimer) {
+      this.protectionTimer = 10;
+      this.maxR = this.r;
+    }
+
+    if (this.protectionTimer) {
+      this.protectionTimer -= dt;
+      if (this.protectionTimer <= 0) {
+        this.protectionTimer = 0;
+      }
+    }
   }
 
   draw(ctx:CanvasRenderingContext2D) {
-    ctx.fillStyle = hueColor(this.hue);
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
-    ctx.fill();
+    if (this.protectionTimer) {
+      super.draw(ctx, 'white');
+      super.draw(ctx, '', this.r * (1 - this.protectionTimer / 10));
+    }
+    else {
+      super.draw(ctx);
+    }
   }
 }

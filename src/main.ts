@@ -23,7 +23,7 @@ function animate(t:number) {
   if (!control.paused) {
     const dt = Timer.delta(t/1000);
     simulator.simulate(dt);
-    simulator.eatAndGrow();
+    simulator.consume();
   }
 
   if (control.keys.Shift) {

@@ -1,29 +1,16 @@
-import { hueColor } from "./utils";
+import { SpaceObject } from "./spaceObject";
 
-export class Asteroid {
-  x:number;
-  y:number;
-  r:number;
-  hue:number;
-  
+
+export class Asteroid extends SpaceObject{  
   constructor({x=0, y=0, r=1, hue=0}) {
-    this.x = x;
-    this.y = y;
-    this.r = r;
-    this.hue = hue;
-  }
-
-  distance(x:number, y:number) {
-    return Math.hypot(this.x - x, this.y - y);
+    super({x, y, r, hue});
   }
 
   forceActingOnObject({x, y, r, hue}: {x:number, y:number, r:number, hue:number}): [number, number] {
     const dx = x - this.x;
     const dy = y - this.y;
-    const distance = this.distance(x, y) + r;
+    const distance = this.distance({x, y}) + r;
     
-    // if (distance > this.r * 100) return [0,0];
-
     const forceMagnitude = r * this.r**2 / distance**2;
 
     let hueDifference = hue - this.hue;
@@ -35,12 +22,5 @@ export class Asteroid {
     const fy = hueFactor * forceMagnitude * dy / distance;
     
     return [fx, fy];
-  }
-
-  draw(ctx:CanvasRenderingContext2D) {
-    ctx.fillStyle = hueColor(this.hue);
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
-    ctx.fill();
   }
 }
