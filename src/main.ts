@@ -22,22 +22,26 @@ function animate(t:number) {
 
   if (!control.paused) {
     const dt = Timer.delta(t/1000);
+    universe.regenerate(Screen.getBoundingBox(), player.r);
+    universe.animate(dt);
     simulator.simulate(dt);
     simulator.consume();
   }
-
+  
+  const d = player.r * .1;
+  
   if (control.keys.Shift) {
-    if (control.keys.ArrowRight) player.x += .1;
-    if (control.keys.ArrowLeft)  player.x -= .1;
-    if (control.keys.ArrowUp)    player.y -= .1;
-    if (control.keys.ArrowDown)  player.y += .1;
+    if (control.keys.ArrowRight) player.x += d;
+    if (control.keys.ArrowLeft)  player.x -= d;
+    if (control.keys.ArrowUp)    player.y -= d;
+    if (control.keys.ArrowDown)  player.y += d;
   }
 
   if (control.keys.Control) {
-    if (control.keys.ArrowRight) player.vx += .1;
-    if (control.keys.ArrowLeft)  player.vx -= .1;
-    if (control.keys.ArrowUp)    player.vy -= .1;
-    if (control.keys.ArrowDown)  player.vy += .1;
+    if (control.keys.ArrowRight) player.vx += d;
+    if (control.keys.ArrowLeft)  player.vx -= d;
+    if (control.keys.ArrowUp)    player.vy -= d;
+    if (control.keys.ArrowDown)  player.vy += d;
   }
 
   player.changeHue(control.getDelta());

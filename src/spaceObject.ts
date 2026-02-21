@@ -1,4 +1,4 @@
-import { hueColor } from "./utils";
+import { makeColor } from "./utils";
 
 
 export class SpaceObject {
@@ -36,7 +36,7 @@ export class SpaceObject {
   }
 
   draw(ctx:CanvasRenderingContext2D, color='', r=0) {
-    ctx.fillStyle = color ? color : hueColor(this.hue);
+    ctx.fillStyle = color ? color : makeColor(this);
     ctx.beginPath();
     ctx.arc(this.x, this.y, r ? r : this.r, 0, 2 * Math.PI);
     ctx.fill();

@@ -32,11 +32,14 @@ export class Player extends SpaceObject {
   }
 
   move(dt:number, {fx=0, fy=0}) {
-    this.vx += 10 * fx * dt;
-    this.vy += 10 * fy * dt;
+    this.vx += 100 * fx * dt;
+    this.vy += 100 * fy * dt;
 
     this.x += this.vx * dt;
     this.y += this.vy * dt;
+
+    this.vx -= 1 * this.vx * dt;
+    this.vy -= 1 * this.vy * dt;
 
     if (!this.canBeReduced() && !this.protectionTimer) {
       this.protectionTimer = 10;
