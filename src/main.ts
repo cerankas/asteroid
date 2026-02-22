@@ -4,6 +4,7 @@ import { Universe } from "./universe";
 import { Timer } from "./timer";
 import { Simulator } from "./simulator";
 import { Control } from "./control";
+import { showScore } from "./utils";
 
 const player = new Player({});
 const universe = new Universe();
@@ -53,6 +54,8 @@ function animate(t:number) {
   player.draw(ctx);
   simulator.drawForces(ctx);
   simulator.drawSpectrumHorizontal(ctx);
+  
+  showScore(player.r);
 }
 
 requestAnimationFrame(animate);

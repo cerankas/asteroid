@@ -41,3 +41,9 @@ export function outsideBoundingBox({x, y}: {x:number, y:number}, {minx=0, maxx=0
 
   return xLow || yLow || xHigh || yHigh;
 }
+
+
+export function showScore(score:number) {
+  const div = <HTMLDivElement> document.getElementById('score');
+  div.innerText = `Score: ${Math.log10(score)*100|0}`;
+}
