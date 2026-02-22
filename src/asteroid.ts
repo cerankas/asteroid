@@ -30,7 +30,7 @@ export class Asteroid extends SpaceObject{
     const dy = y - this.y;
     const distance = this.distance({x, y}) + r/10;
     
-    const forceMagnitude = r * this.r / distance**2;
+    const forceMagnitude = r * this.r**2 / distance**2;
 
     let hueDifference = hue - this.hue;
     while (hueDifference >  180) hueDifference -= 360;

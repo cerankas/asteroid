@@ -48,7 +48,8 @@ export class Simulator {
     const {x, y, r} = this.player;
     const rr = 1.33 * r;
     for (const a of this.universe.asteroids) {
-      const [fx, fy] = a.forceActingOnObject(this.player);
+      const [afx, afy] = a.forceActingOnObject(this.player);
+      const [fx, fy] = [afx / r, afy / r];
       const magnitude = Math.hypot(fx, fy);
       const dx = fx / magnitude;
       const dy = fy / magnitude;
