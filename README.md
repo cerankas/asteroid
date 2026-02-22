@@ -1,3 +1,5 @@
+![Asteroid banner](banner.jpeg)
+
 # Asteroid
 A simple game about an asteroid, where the only thing you control is its color.
 * Swipe left/right to change your color.
