@@ -2,6 +2,7 @@ import type { Player } from "./player";
 import type { Universe } from "./universe";
 import { deleteArrayItem } from "./utils";
 
+
 export class Simulator {
   time = 0;
 

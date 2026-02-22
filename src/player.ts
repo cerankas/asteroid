@@ -38,8 +38,8 @@ export class Player extends SpaceObject {
     this.x += this.vx * dt;
     this.y += this.vy * dt;
 
-    this.vx -= 1 * this.vx * dt;
-    this.vy -= 1 * this.vy * dt;
+    this.vx -= this.vx * dt;
+    this.vy -= this.vy * dt;
 
     if (!this.canBeReduced() && !this.protectionTimer) {
       this.protectionTimer = 10;

@@ -5,18 +5,7 @@ import { deleteArrayItem, outsideBoundingBox, rnd } from "./utils";
 export class Universe {
   asteroids:Array<Asteroid> = [];
 
-  constructor() {
-    return;
-    const density = .05;
-    const size = 50;
-    const count = size**2 * density;
-    console.log(count);
-    while (this.asteroids.length < count) {
-      this.addRandomAsteroid({minx:-size, maxx:size, miny:-size, maxy:size});
-    }
-  }
-
-  addRandomAsteroid({minx=-1, maxx=1, miny=-1, maxy=1, minr=.5, maxr=2}, emergeTime=.5) {
+  addRandomAsteroid({minx=-1, maxx=1, miny=-1, maxy=1, minr=.5, maxr=2}, emergeTime=3) {
     const x = rnd(minx, maxx);
     const y = rnd(miny, maxy);
     const r = rnd(minr, maxr);
@@ -71,8 +60,8 @@ export class Universe {
       }
       
       const desiredArea = .0001 * half**2;
-      if (smallerArea < desiredArea) this.addRandomAsteroid({minx, maxx, miny, maxy, minr, maxr:r}, 3);
-      if (greaterArea < desiredArea) this.addRandomAsteroid({minx, maxx, miny, maxy, minr:r, maxr}, 3);
+      if (smallerArea < desiredArea) this.addRandomAsteroid({minx, maxx, miny, maxy, minr, maxr:r});
+      if (greaterArea < desiredArea) this.addRandomAsteroid({minx, maxx, miny, maxy, minr:r, maxr});
     }
   }
 
