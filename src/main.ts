@@ -35,6 +35,12 @@ function animate(t:number) {
   Sound.terminateUnusedVoices();
   
   player.changeHue(control.getDelta());
+  if (control.keys.r) player.hue = 0;
+  if (control.keys.g) player.hue = 120;
+  if (control.keys.b) player.hue = 240;
+  if (control.keys.c) player.hue = 180;
+  if (control.keys.m) player.hue = 300;
+  if (control.keys.y) player.hue = 60;
 
   Screen.reframe(player);
   Screen.clear();
