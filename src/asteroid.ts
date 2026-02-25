@@ -7,6 +7,8 @@ export class Asteroid extends SpaceObject{
   targetR=0;
   deltaR=0;
   
+  id=Symbol();
+
   constructor({x=0, y=0, r=1, hue=0}) {
     super({x, y, r, hue});
   }

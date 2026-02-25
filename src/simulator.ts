@@ -1,5 +1,6 @@
 import type { Player } from "./player";
 import type { Universe } from "./universe";
+import { Sound } from "./sound";
 import { deleteArrayItem } from "./utils";
 
 
@@ -62,6 +63,16 @@ export class Simulator {
       ctx.moveTo(x + dx * rr, y + dy * rr);
       ctx.lineTo(x + dx * r2, y + dy * r2);
       ctx.stroke();
+    }
+  }
+
+  playForceSounds() {
+    for (const a of this.universe.asteroids) {
+      const [fx, fy] = a.forceActingOnObject(this.player);
+      const f = Math.hypot(fx, fy) / this.player.r*2;
+      const d = a.distance(this.player) / this.player.r;
+      if (f < .0003) continue;
+      Sound.playVoice({id:a.id, pitch:20*d, volume:f});
     }
   }
 

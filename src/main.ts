@@ -5,6 +5,7 @@ import { Timer } from "./timer";
 import { Simulator } from "./simulator";
 import { Control } from "./control";
 import { showScore } from "./utils";
+import { Sound } from "./sound";
 
 
 const player = new Player({});
@@ -25,10 +26,13 @@ function animate(t:number) {
     universe.animate(dt);
     simulator.simulate(dt);
     simulator.consume();
+    simulator.playForceSounds();
   }
   else {
     Timer.reset();
   }
+
+  Sound.terminateUnusedVoices();
   
   player.changeHue(control.getDelta());
 

@@ -1,3 +1,5 @@
+import { Sound } from "./sound";
+
 export class Control {
   paused = false;
   keys:{[key:string]:boolean} = {};
@@ -18,6 +20,7 @@ export class Control {
   keydown(e:KeyboardEvent) {
     if (e.key == ' ') this.paused = !this.paused;
     this.keys[e.key] = true;
+    Sound.anyUserActionPerformed = true;
   }
 
   keyup(e:KeyboardEvent) {
@@ -27,5 +30,6 @@ export class Control {
   pointermove(e:PointerEvent) {
     if (!e.buttons) return;
     this.delta += e.movementX / window.innerWidth * 2 * 361;
+    Sound.anyUserActionPerformed = true;
   }
 }
