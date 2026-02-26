@@ -1,6 +1,8 @@
 export class Sound {
   static ctx:AudioContext|null = null;
 
+  static muted = false;
+
   static voices:{[id:symbol]:Voice} = {};
 
   static updateTime = 0;
@@ -25,6 +27,7 @@ export class Sound {
   static playVoice({id=Symbol(), pitch=500, lfo=10, volume=1}) {
     this.initialize();
     if (!this.ctx) return;
+    if (this.muted) return;
     
     if (!(id in this.voices))
       this.voices[id] = new Voice();
@@ -37,7 +40,7 @@ export class Sound {
   }
 
   static terminateUnusedVoices() {
-    if (this.updateTime == 0)
+    if (this.updateTime == 0 || this.muted)
       this.terminateAllVoices();
 
     for (const id of this.voiceIDs())

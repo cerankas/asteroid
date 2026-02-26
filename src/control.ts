@@ -1,3 +1,4 @@
+import { Icons } from "./icons";
 import { Sound } from "./sound";
 
 export class Control {
@@ -9,6 +10,24 @@ export class Control {
     document.addEventListener('keydown', this.keydown.bind(this));
     document.addEventListener('keyup', this.keyup.bind(this));
     document.addEventListener('pointermove', this.pointermove.bind(this));
+
+    Icons.pause.addEventListener('click', () => this.setPaused(true));
+    Icons.play.addEventListener('click', () => this.setPaused(false));
+
+    Icons.speaker.addEventListener('click', () => this.setMuted(true));
+    Icons.muted.addEventListener('click', () => this.setMuted(false));
+  }
+
+  setPaused(state:boolean) {
+    this.paused = state;
+    Icons.pause.style.display = this.paused ? 'none' : 'inline';
+    Icons.play.style.display = this.paused ? 'inline' : 'none';
+  }
+
+  setMuted(state:boolean) {
+    Sound.muted = state;
+    Icons.speaker.style.display = Sound.muted ? 'none' : 'inline';
+    Icons.muted.style.display = Sound.muted ? 'inline' : 'none';
   }
 
   getDelta() {
@@ -18,7 +37,7 @@ export class Control {
   }
 
   keydown(e:KeyboardEvent) {
-    if (e.key == ' ') this.paused = !this.paused;
+    if (e.key == ' ') this.setPaused(!this.paused);
     this.keys[e.key] = true;
     Sound.anyUserActionPerformed = true;
   }
