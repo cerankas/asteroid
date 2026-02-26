@@ -12,7 +12,7 @@ export class Control {
   }
 
   getDelta() {
-    const tmp = this.delta;
+    const tmp = -this.delta;
     this.delta = 0;
     return tmp;
   }

@@ -1,7 +1,7 @@
 import type { Player } from "./player";
 import type { Universe } from "./universe";
 import { Sound } from "./sound";
-import { deleteArrayItem } from "./utils";
+import { deleteArrayItem, makeColor } from "./utils";
 
 
 export class Simulator {
@@ -59,7 +59,7 @@ export class Simulator {
       const r2 = rr + size * r * 10;
       ctx.beginPath();
       ctx.lineWidth = size * r;
-      ctx.strokeStyle = `hsl(${a.hue}, 100%, 50%)`;
+      ctx.strokeStyle = makeColor({hue:a.hue});
       ctx.moveTo(x + dx * rr, y + dy * rr);
       ctx.lineTo(x + dx * r2, y + dy * r2);
       ctx.stroke();
@@ -81,44 +81,25 @@ export class Simulator {
     const height = ctx.canvas.height;
 
     const unit = height * .01;
-    const half = unit / 2;
 
     ctx.save();
     ctx.resetTransform();
+    ctx.lineWidth = width / 1000;
 
-    const hueToX = (hue:number) => width * (.25 + .5 * hue / 361);
-    
-    ctx.lineWidth = width / 2000;
-
-    for (let hue = 0; hue <= 360; hue += 2 ) {
+    const drawSpectrumBar = (hue:number, size:number) => {
+      const x = width/4 + width/2 * ((360 + 180 + hue - this.player.hue) % 360) / 360;
+      const y = .97 * height;
       ctx.beginPath();
-      ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
-      ctx.moveTo(hueToX(hue), height - 2 * unit);
-      ctx.lineTo(hueToX(hue), height - 3 * unit);
+      ctx.strokeStyle = makeColor({hue});
+      ctx.moveTo(x, y - size);
+      ctx.lineTo(x, y + size);
       ctx.stroke();
     }
 
-    {
-      ctx.beginPath();
-      ctx.strokeStyle = `hsl(${this.player.hue}, 100%, 50%)`;
-      const x = hueToX(this.player.hue);
-      const y = height - 3.7 * unit;
-      ctx.moveTo(x, y - half);
-      ctx.lineTo(x, y + half);
-      ctx.moveTo(x - half, y);
-      ctx.lineTo(x + half, y);
-      ctx.stroke();
-    }
-
-    {
-      ctx.beginPath();
-      const hue = (this.player.hue + 180) % 360;
-      ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
-      const x = hueToX(hue);
-      const y = height - 1.3 * unit;
-      ctx.moveTo(x - half, y);
-      ctx.lineTo(x + half, y);
-      ctx.stroke();
+    const step = 5;
+    const div = 30;
+    for (let hue = 0; hue <= 360; hue += step ) {
+      drawSpectrumBar(hue, (hue % div) ? unit : 2 * unit);
     }
 
     ctx.restore();
