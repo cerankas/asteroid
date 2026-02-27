@@ -51,6 +51,8 @@ function animate(t:number) {
   simulator.drawSpectrumHorizontal(ctx);
 
   showScore(player.r);
+
+  control.updateFullscreenIcon();
 }
 
 

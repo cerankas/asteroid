@@ -16,6 +16,9 @@ export class Control {
 
     Icons.speaker.addEventListener('click', () => this.setMuted(true));
     Icons.muted.addEventListener('click', () => this.setMuted(false));
+
+    Icons.fullscreen.addEventListener('click', () => this.toggleFullscreen());
+    Icons.windowed.addEventListener('click', () => this.toggleFullscreen());
   }
 
   setPaused(state:boolean) {
@@ -28,6 +31,18 @@ export class Control {
     Sound.muted = state;
     Icons.speaker.style.display = Sound.muted ? 'none' : 'inline';
     Icons.muted.style.display = Sound.muted ? 'inline' : 'none';
+  }
+
+  toggleFullscreen() {
+    const fullscreen = document.fullscreenElement != null;
+    if (fullscreen) document.exitFullscreen(); else document.body.requestFullscreen({navigationUI: 'hide'});
+    this.updateFullscreenIcon();
+  }
+
+  updateFullscreenIcon() {
+    const fullscreen = document.fullscreenElement != null;
+    Icons.fullscreen.style.display = fullscreen ? 'none' : 'inline';
+    Icons.windowed.style.display = fullscreen ? 'inline' : 'none';
   }
 
   getDelta() {
