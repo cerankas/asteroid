@@ -1,18 +1,29 @@
 import { Icons } from "./icons";
 import { Sound } from "./sound";
+import type { Simulator } from "./simulator";
+
 
 export class Control {
+  simulator:Simulator;
+
   paused = false;
   keys:{[key:string]:boolean} = {};
   delta = 0;
 
-  constructor() {
+  constructor(simulator:Simulator) {
+    this.simulator = simulator;
+
     document.addEventListener('keydown', this.keydown.bind(this));
     document.addEventListener('keyup', this.keyup.bind(this));
     document.addEventListener('pointermove', this.pointermove.bind(this));
 
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+
     Icons.pause.addEventListener('click', () => this.setPaused(true));
     Icons.play.addEventListener('click', () => this.setPaused(false));
+
+    Icons.restart.addEventListener('click', () => this.simulator.restart());
+    Icons.restart.addEventListener('mousedown', (e:MouseEvent) => { if (e.button==2) this.simulator.restart({best:true}); });
 
     Icons.speaker.addEventListener('click', () => this.setMuted(true));
     Icons.muted.addEventListener('click', () => this.setMuted(false));

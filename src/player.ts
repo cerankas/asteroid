@@ -8,7 +8,7 @@ export class Player extends SpaceObject {
   maxR:number;
   protectionTimer=0;
 
-  constructor({x=0, y=0, r=1, hue=0}) {
+  constructor({x=0, y=0, r=1, hue=0} = {}) {
     super({x, y, r, hue});
     this.maxR = r;
   }

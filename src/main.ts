@@ -8,10 +8,8 @@ import { showScore } from "./utils";
 import { Sound } from "./sound";
 
 
-const player = new Player({});
-const universe = new Universe();
-const simulator = new Simulator(player, universe);
-const control = new Control();
+const simulator = new Simulator();
+const control = new Control(simulator);
 
 
 function animate(t:number) {
@@ -19,6 +17,9 @@ function animate(t:number) {
 
   const ctx = Screen.ctx;
   if (!ctx) return;
+
+  const player = simulator.player;
+  const universe = simulator.universe;
   
   if (!control.paused) {
     const dt = Timer.delta(t/1000);

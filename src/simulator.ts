@@ -1,5 +1,5 @@
-import type { Player } from "./player";
-import type { Universe } from "./universe";
+import { Player } from "./player";
+import { Universe } from "./universe";
 import { Sound } from "./sound";
 import { deleteArrayItem, makeColor } from "./utils";
 
@@ -7,8 +7,8 @@ import { deleteArrayItem, makeColor } from "./utils";
 export class Simulator {
   time = 0;
 
-  player:Player;
-  universe:Universe;
+  player = new Player();
+  universe = new Universe();
 
   constructor(player:Player, universe:Universe) {
     this.player = player;
@@ -33,6 +33,12 @@ export class Simulator {
       this.time -= fixedTimeStep;
       this.simulateFixedTimeStep(fixedTimeStep);
     }
+  }
+
+  restart({best}={best:false}) {
+    this.scoreOffset = best ? (this.bestScore - this.bestScore % 500) : 0;
+    this.player = new Player();
+    this.universe = new Universe();
   }
 
   consume() {
