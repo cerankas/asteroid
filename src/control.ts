@@ -7,14 +7,11 @@ export class Control {
   simulator:Simulator;
 
   paused = false;
-  keys:{[key:string]:boolean} = {};
-  delta = 0;
 
   constructor(simulator:Simulator) {
     this.simulator = simulator;
 
     document.addEventListener('keydown', this.keydown.bind(this));
-    document.addEventListener('keyup', this.keyup.bind(this));
     document.addEventListener('pointermove', this.pointermove.bind(this));
 
     document.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -56,25 +53,25 @@ export class Control {
     Icons.windowed.style.display = showIf(fullscreen);
   }
 
-  getDelta() {
-    const tmp = -this.delta;
-    this.delta = 0;
-    return tmp;
-  }
-
   keydown(e:KeyboardEvent) {
-    if (e.key == ' ') this.setPaused(!this.paused);
-    this.keys[e.key] = true;
-    Sound.anyUserActionPerformed = true;
-  }
+    const k = e.key;
+    const player = this.simulator.player;
+    
+    if (k == ' ') this.setPaused(!this.paused);
+    
+    if (k == 'r' || k == '1') player.hue = 0;
+    if (k == 'y' || k == '2') player.hue = 60;
+    if (k == 'g' || k == '3') player.hue = 120;
+    if (k == 'c' || k == '4') player.hue = 180;
+    if (k == 'b' || k == '5') player.hue = 240;
+    if (k == 'm' || k == '6') player.hue = 300;
 
-  keyup(e:KeyboardEvent) {
-    this.keys[e.key] = false;
+    Sound.anyUserActionPerformed = true;
   }
 
   pointermove(e:PointerEvent) {
     if (!e.buttons) return;
-    this.delta += e.movementX / window.innerWidth * 2 * 361;
+    this.simulator.player.changeHue(-e.movementX / window.innerWidth * 2 * 360);
     Sound.anyUserActionPerformed = true;
   }
 }
