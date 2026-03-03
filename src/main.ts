@@ -1,10 +1,7 @@
 import { Screen } from "./screen";
-import { Player } from "./player";
-import { Universe } from "./universe";
 import { Timer } from "./timer";
 import { Simulator } from "./simulator";
 import { Control } from "./control";
-import { showScore } from "./utils";
 import { Sound } from "./sound";
 
 
@@ -53,7 +50,8 @@ function animate(t:number) {
 
   simulator.keepSafeScale();
 
-  showScore(player.r);
+  simulator.showScore();
+  simulator.updateBestScore();
 
   control.updateFullscreenIcon();
 }

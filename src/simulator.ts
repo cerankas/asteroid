@@ -8,12 +8,14 @@ import { Screen } from "./screen";
 export class Simulator {
   time = 0;
 
+  scoreOffset = 0;
+  bestScore = parseInt(localStorage.getItem('bestScore') || '0');
+
   player = new Player();
   universe = new Universe();
 
-  constructor(player:Player, universe:Universe) {
-    this.player = player;
-    this.universe = universe;
+  constructor() {
+    this.showBestScore()
   }
 
   simulateFixedTimeStep(dt:number) {
@@ -71,6 +73,29 @@ export class Simulator {
     if (Math.abs(this.player.x) > span || Math.abs(this.player.y) > span) {
       this.translate(-this.player.x, -this.player.y);
     } 
+  }
+
+  score() {
+    return this.scoreOffset + Math.log10(this.player.r)*100|0;
+  }
+
+  updateBestScore() {
+    const score = this.score();
+    if (this.bestScore < score) {
+      this.bestScore = score;
+      localStorage.setItem('bestScore', score.toString());
+      this.showBestScore();
+    }
+  }
+
+  showScore() {
+    const div = <HTMLDivElement> document.getElementById('score');
+    div.innerText = `Score: ${this.score()}`;
+  }
+
+  showBestScore() {
+    const div = <HTMLDivElement> document.getElementById('best-score');
+    div.innerText = `Best score: ${this.bestScore}`;
   }
 
   consume() {
