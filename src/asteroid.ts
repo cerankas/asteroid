@@ -3,9 +3,8 @@ import { makeColor } from "./utils";
 
 
 export class Asteroid extends SpaceObject{  
-  initR=0;
-  targetR=0;
-  deltaR=0;
+  intensity=1;
+  delta=0;
   
   id=Symbol();
 
@@ -14,16 +13,18 @@ export class Asteroid extends SpaceObject{
   }
 
   animate(dt:number) {
-    if (!this.deltaR) return;
+    if (!this.delta) return;
 
-    this.r += dt * this.deltaR;
+    this.intensity += dt * this.delta;
     
-    const finishedUp   = this.deltaR > 0 && this.r >= this.targetR;
-    const finishedDown = this.deltaR < 0 && this.r <= this.targetR;
-    
-    if (finishedUp || finishedDown) {
-      this.r = this.targetR;
-      this.deltaR = 0;
+    if (this.intensity >= 1) {
+      this.intensity = 1;
+      this.delta = 0;
+    }
+
+    if (this.intensity <= 0) {
+      this.intensity = 0;
+      this.delta = 0;
     }
   }
 
@@ -32,7 +33,7 @@ export class Asteroid extends SpaceObject{
     const dy = y - this.y;
     const distance = this.distance({x, y}) + r/10;
     
-    const forceMagnitude = r * this.r**2 / distance**2;
+    const forceMagnitude = r * this.r**2 / distance**2 * this.intensity;
 
     let hueDifference = hue - this.hue;
     while (hueDifference >  180) hueDifference -= 360;
@@ -46,32 +47,19 @@ export class Asteroid extends SpaceObject{
   }
 
   fade(time=.5) {
-    if (this.deltaR) return;
-    this.initR = this.r;
-    this.targetR = 0;
-    this.deltaR = -this.r / time;
+    if (this.delta) return;
+    this.intensity = this.r;
+    this.delta = -1 / time;
   }
 
   emerge(time=.5) {
-    this.initR = 0;
-    this.targetR = this.r;
-    this.deltaR = this.r / time;
-    this.r = 0;
+    this.intensity = 0;
+    this.delta = 1 / time;
   }
 
   draw(ctx:CanvasRenderingContext2D) {
-    if (this.deltaR < 0) {
-      const hue = this.hue;
-      const lightness = 50 * this.r / this.initR;
-      super.draw(ctx, makeColor({hue, lightness}), this.initR)
-    }
-    else if (this.deltaR > 0) {
-      const hue = this.hue;
-      const lightness = 50 * this.r / this.targetR;
-      super.draw(ctx, makeColor({hue, lightness}), this.targetR);
-    }
-    else {
-      super.draw(ctx);
-    }
+    const hue = this.hue;
+    const lightness = 50 * this.intensity;
+    super.draw(ctx, makeColor({hue, lightness}));
   }
 }

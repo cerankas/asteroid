@@ -26,14 +26,19 @@ export class Universe {
     const [minr, maxr] = [r * .5, r * 4];
 
     for (const a of this.asteroids) {
-      if (outsideBoundingBox(a, {minx, maxx, miny, maxy}, a.r)) {
+      if (outsideBoundingBox(a, {minx, maxx, miny, maxy}, a.r) || a.intensity == 0) {
         deleteArrayItem(this.asteroids, a);
       }
     }
 
     for (const a of this.asteroids) {
       if (a.r < minr/2 || a.r > maxr*2) {
-        a.fade(3);
+        if (a.r < minr/4 || a.r > maxr*4) {
+          deleteArrayItem(this.asteroids, a);
+        }
+        else {
+          a.fade(3);
+        }
       }
     }
 
