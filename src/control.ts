@@ -23,14 +23,14 @@ export class Control {
 
   setPaused(state:boolean) {
     this.paused = state;
-    Icons.pause.style.display = this.paused ? 'none' : 'inline';
-    Icons.play.style.display = this.paused ? 'inline' : 'none';
+    Icons.pause.style.display = showIf(!this.paused);
+    Icons.play.style.display = showIf(this.paused);
   }
 
   setMuted(state:boolean) {
     Sound.muted = state;
-    Icons.speaker.style.display = Sound.muted ? 'none' : 'inline';
-    Icons.muted.style.display = Sound.muted ? 'inline' : 'none';
+    Icons.speaker.style.display = showIf(!Sound.muted);
+    Icons.muted.style.display = showIf(Sound.muted);
   }
 
   toggleFullscreen() {
@@ -41,8 +41,8 @@ export class Control {
 
   updateFullscreenIcon() {
     const fullscreen = document.fullscreenElement != null;
-    Icons.fullscreen.style.display = fullscreen ? 'none' : 'inline';
-    Icons.windowed.style.display = fullscreen ? 'inline' : 'none';
+    Icons.fullscreen.style.display = showIf(!fullscreen);
+    Icons.windowed.style.display = showIf(fullscreen);
   }
 
   getDelta() {
@@ -66,4 +66,9 @@ export class Control {
     this.delta += e.movementX / window.innerWidth * 2 * 361;
     Sound.anyUserActionPerformed = true;
   }
+}
+
+
+function showIf(condition:boolean) {
+  return condition ? 'inline' : 'none';
 }
