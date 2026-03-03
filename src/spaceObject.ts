@@ -14,6 +14,17 @@ export class SpaceObject {
     this.hue = hue;
   }
 
+  rescale(factor:number) {
+    this.x *= factor;
+    this.y *= factor;
+    this.r *= factor;
+  }
+
+  translate(dx:number, dy:number) {
+    this.x += dx;
+    this.y += dy;
+  }
+
   distance({x, y}: {x:number, y:number}) {
     return Math.hypot(this.x - x, this.y - y);
   }
@@ -27,9 +38,8 @@ export class SpaceObject {
   }
 
   consume(o:SpaceObject) {
+    const delta = .01 * o.r;
     while (this.isColliding(o) && o.canBeReduced()) {
-      const delta = .001 * this.r**2;
-      
       this.r += delta / this.r;
       o.r    -= delta / o.r;
     }

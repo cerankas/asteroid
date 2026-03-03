@@ -51,6 +51,8 @@ function animate(t:number) {
   simulator.drawForces(ctx);
   simulator.drawSpectrumHorizontal(ctx);
 
+  simulator.keepSafeScale();
+
   showScore(player.r);
 
   control.updateFullscreenIcon();

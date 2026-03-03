@@ -2,6 +2,7 @@ import { Player } from "./player";
 import { Universe } from "./universe";
 import { Sound } from "./sound";
 import { deleteArrayItem, makeColor } from "./utils";
+import { Screen } from "./screen";
 
 
 export class Simulator {
@@ -39,6 +40,37 @@ export class Simulator {
     this.scoreOffset = best ? (this.bestScore - this.bestScore % 500) : 0;
     this.player = new Player();
     this.universe = new Universe();
+  }
+
+  rescale(factor:number) {
+    this.player.rescale(factor);
+    for (const a of this.universe.asteroids)
+      a.rescale(factor);
+    Screen.reframe(this.player);
+  }
+
+  translate(dx:number, dy:number) {
+    this.player.translate(dx, dy);
+    for (const a of this.universe.asteroids)
+      a.translate(dx, dy);
+    Screen.reframe(this.player);
+  }
+
+  keepSafeScale() {
+    if (this.player.r > 10) {
+      this.rescale(.1);
+      this.scoreOffset += 100;
+    }
+
+    if (this.player.r < .1) {
+      this.rescale(10);
+      this.scoreOffset -= 100;
+    }
+
+    const span = 10000;
+    if (Math.abs(this.player.x) > span || Math.abs(this.player.y) > span) {
+      this.translate(-this.player.x, -this.player.y);
+    } 
   }
 
   consume() {

@@ -13,6 +13,13 @@ export class Player extends SpaceObject {
     this.maxR = r;
   }
 
+  rescale(factor:number) {
+    super.rescale(factor);
+    this.vx *= factor;
+    this.vy *= factor;
+    this.maxR *= factor;
+  }
+
   canBeReduced() {
     return super.canBeReduced() && this.r > this.maxR / 2 && !this.protectionTimer;
   }
