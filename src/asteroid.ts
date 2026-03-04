@@ -48,7 +48,7 @@ export class Asteroid extends SpaceObject{
 
   fade(time=.5) {
     if (this.delta) return;
-    this.intensity = this.r;
+    this.intensity = 1;
     this.delta = -1 / time;
   }
 
