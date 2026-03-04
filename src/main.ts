@@ -20,7 +20,7 @@ function animate(t:number) {
   
   if (!control.paused) {
     const dt = Timer.delta(t/1000);
-    universe.regenerate(Screen.getBoundingBox(), player.r);
+    universe.regenerate(Screen.getBoundingBox(), player);
     universe.animate(dt);
     simulator.simulate(dt);
     simulator.consume();

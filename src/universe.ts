@@ -5,12 +5,14 @@ import { deleteArrayItem, outsideBoundingBox, rnd } from "./utils";
 export class Universe {
   asteroids:Array<Asteroid> = [];
 
-  addRandomAsteroid({minx=-1, maxx=1, miny=-1, maxy=1, minr=.5, maxr=2}, emergeTime=3) {
+  addRandomAsteroid({minx=-1, maxx=1, miny=-1, maxy=1, minr=.5, maxr=2}, avoid={x:0,y:0,r:0}, emergeTime=3) {
     const x = rnd(minx, maxx);
     const y = rnd(miny, maxy);
     const r = rnd(minr, maxr);
     const hue = rnd(0, 360);
-    
+
+    if (Math.hypot(x - avoid.x, y - avoid.y) < r + avoid.r) return false;
+
     const isTooClose = (a:Asteroid) => a.distance({x, y}) < 2 * (a.r + r);
 
     if (this.asteroids.some(isTooClose)) return false;
@@ -22,8 +24,8 @@ export class Universe {
     return true;
   }
 
-  regenerate({minx=0, maxx=0, miny=0, maxy=0}, r=1) {
-    const [minr, maxr] = [r * .5, r * 4];
+  regenerate({minx=0, maxx=0, miny=0, maxy=0}, player={x:0,y:0,r:0}) {
+    const [minr, maxr] = [player.r * .25, player.r * 4];
 
     for (const a of this.asteroids) {
       if (outsideBoundingBox(a, {minx, maxx, miny, maxy}, a.r) || a.intensity == 0) {
@@ -32,17 +34,12 @@ export class Universe {
     }
 
     for (const a of this.asteroids) {
-      if (a.r < minr/2 || a.r > maxr*2) {
-        if (a.r < minr/4 || a.r > maxr*4) {
-          deleteArrayItem(this.asteroids, a);
-        }
-        else {
+      if (a.r < minr || a.r > maxr) {
           a.fade(3);
-        }
       }
     }
 
-    const half = r * 5; // half of inspection box side length
+    const half = player.r * 5; // half of inspection box side length
     const x0 = rnd(minx+half, maxx-half);
     const y0 = rnd(miny+half, maxy-half);
     
@@ -58,15 +55,16 @@ export class Universe {
       for (const a of this.asteroids) {
         if (outsideBoundingBox(a, {minx, maxx, miny, maxy})) continue;
         
-        const area = (a.r / r)**2;
+        const area = (a.r / player.r)**2;
         
-        if (a.r < r) smallerArea += area;
-        else         greaterArea += area;
+        if (a.r < player.r) smallerArea += area;
+        else                greaterArea += area;
       }
       
       const desiredArea = .0001 * half**2;
-      if (smallerArea < desiredArea) this.addRandomAsteroid({minx, maxx, miny, maxy, minr, maxr:r});
-      if (greaterArea < desiredArea) this.addRandomAsteroid({minx, maxx, miny, maxy, minr:r, maxr});
+      const avoid = {...player, r:player.r * 5};
+      if (smallerArea < desiredArea) this.addRandomAsteroid({minx, maxx, miny, maxy, minr, maxr:player.r}, avoid);
+      if (greaterArea < desiredArea) this.addRandomAsteroid({minx, maxx, miny, maxy, minr:player.r, maxr}, avoid);
     }
   }
 
