@@ -122,7 +122,7 @@ export class Simulator {
       const size = magnitude ** .5;
       rays.push({a, dx, dy, size});
     }
-    rays.sort((a,b) => (a.size > b.size) ? -1 : 1);
+    rays.sort((a,b) => b.size - a.size);
     for (const {a, dx, dy, size} of rays) {
       const r2 = rr + size * r * 10;
       const width = size * r;
@@ -136,12 +136,17 @@ export class Simulator {
   }
 
   playForceSounds() {
+    const sounds = [];
     for (const a of this.universe.asteroids) {
       const [fx, fy] = a.forceActingOnObject(this.player);
-      const f = Math.hypot(fx, fy) / this.player.r*2;
-      const d = a.distance(this.player) / this.player.r;
-      if (f < .0003) continue;
-      Sound.playVoice({id:a.id, pitch:20*d, volume:f});
+      const volume = Math.hypot(fx, fy) / this.player.r;
+      const pitch = 20 * a.distance(this.player) / this.player.r;
+      sounds.push({a, pitch, volume});
+    }
+    sounds.sort((a,b) => b.volume - a.volume);
+    if (sounds.length > 30) sounds.length = 30;
+    for (const {a, pitch, volume} of sounds) {
+      Sound.playVoice({id:a.id, pitch, volume});
     }
   }
 
