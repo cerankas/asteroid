@@ -112,6 +112,7 @@ export class Simulator {
   drawForces(ctx:CanvasRenderingContext2D) {
     const {x, y, r} = this.player;
     const rr = 1.33 * r;
+    const rays = [];
     for (const a of this.universe.asteroids) {
       const [afx, afy] = a.forceActingOnObject(this.player);
       const [fx, fy] = [afx / r, afy / r];
@@ -119,9 +120,14 @@ export class Simulator {
       const dx = fx / magnitude;
       const dy = fy / magnitude;
       const size = magnitude ** .5;
+      rays.push({a, dx, dy, size});
+    }
+    rays.sort((a,b) => (a.size > b.size) ? -1 : 1);
+    for (const {a, dx, dy, size} of rays) {
       const r2 = rr + size * r * 10;
+      const width = size * r;
       ctx.beginPath();
-      ctx.lineWidth = size * r;
+      ctx.lineWidth = width;
       ctx.strokeStyle = makeColor({hue:a.hue});
       ctx.moveTo(x + dx * rr, y + dy * rr);
       ctx.lineTo(x + dx * r2, y + dy * r2);
