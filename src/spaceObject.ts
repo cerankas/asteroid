@@ -1,4 +1,4 @@
-import { makeColor } from "./utils";
+import { distance, makeColor } from "./utils";
 
 
 export class SpaceObject {
@@ -26,7 +26,7 @@ export class SpaceObject {
   }
 
   distance({x, y}: {x:number, y:number}) {
-    return Math.hypot(this.x - x, this.y - y);
+    return distance(this, {x, y});
   }
 
   isColliding(o:SpaceObject) {

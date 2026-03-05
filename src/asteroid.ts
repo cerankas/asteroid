@@ -17,12 +17,12 @@ export class Asteroid extends SpaceObject{
 
     this.intensity += dt * this.delta;
     
-    if (this.intensity >= 1) {
+    if (this.delta > 0 && this.intensity > 1) {
       this.intensity = 1;
       this.delta = 0;
     }
 
-    if (this.intensity <= 0) {
+    if (this.delta < 0 && this.intensity < 0) {
       this.intensity = 0;
       this.delta = 0;
     }
@@ -33,28 +33,32 @@ export class Asteroid extends SpaceObject{
     const dy = y - this.y;
     const distance = this.distance({x, y}) + r/10;
     
-    const forceMagnitude = r * this.r**2 / distance**2 * this.intensity;
+    const pureGravity = r * this.r**2 / distance**2;
 
     let hueDifference = hue - this.hue;
     while (hueDifference >  180) hueDifference -= 360;
     while (hueDifference < -180) hueDifference += 360;
     const hueFactor = Math.abs(hueDifference / 90) - 1;
+
+    const forceMagnitude = pureGravity * hueFactor * this.intensity;
     
-    const fx = hueFactor * forceMagnitude * dx / distance;
-    const fy = hueFactor * forceMagnitude * dy / distance;
+    const fx = forceMagnitude * dx / distance;
+    const fy = forceMagnitude * dy / distance;
     
     return [fx, fy];
   }
 
-  fade(time=.5) {
-    if (this.delta) return;
-    this.intensity = 1;
-    this.delta = -1 / time;
+  fadeOut(period=3) {
+    this.delta = -1 / period;
   }
 
-  emerge(time=.5) {
+  fadeIn(period=3) {
     this.intensity = 0;
-    this.delta = 1 / time;
+    this.delta = 1 / period;
+  }
+
+  faded() {
+    return this.intensity == 0 && this.delta == 0;
   }
 
   draw(ctx:CanvasRenderingContext2D) {

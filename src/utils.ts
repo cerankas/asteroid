@@ -41,3 +41,8 @@ export function outsideBoundingBox({x, y}: {x:number, y:number}, {minx=0, maxx=0
 
   return xLow || yLow || xHigh || yHigh;
 }
+
+
+export function distance(a:{x:number, y:number}, b:{x:number, y:number}) {
+  return Math.hypot(a.x - b.x, a.y - b.y);
+}
