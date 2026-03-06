@@ -10,8 +10,8 @@ export class Universe {
   addRandomAsteroid({minx=-1, maxx=1, miny=-1, maxy=1, minr=.5, maxr=2}, player={x:0,y:0,r:0}) {
     const x = rnd(minx, maxx);
     const y = rnd(miny, maxy);
-    
-    if (distance(player, {x, y}) < maxr + 5 * player.r) return;
+
+    const playerDistance = distance(player, {x, y});
     
     const nearbyAsteroids = filterAsteroids(this.asteroids, a => a.distance({x, y}) < maxr + 5 * player.r);
     const areas = smallerAndGreaterAsteroidAreas(nearbyAsteroids, player.r);
@@ -19,8 +19,12 @@ export class Universe {
     if (areas.smaller < areas.greater) maxr = player.r;
     if (areas.smaller > areas.greater) minr = player.r;
 
+    maxr = Math.min(maxr, playerDistance / 8);
+    if (maxr < minr) return;
+
     const r = rnd(minr, maxr);
 
+    if (playerDistance < 2 * (player.r + 2)) return;
     if (nearbyAsteroids.some(a => a.distance({x, y}) < 2 * (a.r + r))) return;
     
     const hue = rnd(0, 360);
