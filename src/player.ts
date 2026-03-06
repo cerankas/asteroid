@@ -24,8 +24,8 @@ export class Player extends SpaceObject {
     return super.canBeReduced() && this.r > this.maxR / 2 && !this.protectionTimer;
   }
 
-  consume(o:SpaceObject) {
-    super.consume(o);
+  consume(o:SpaceObject, chunk:number) {
+    super.consume(o, chunk);
     if (this.maxR < this.r) {
       this.maxR = this.r;
       this.protectionTimer = 0;

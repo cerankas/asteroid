@@ -98,12 +98,13 @@ export class Simulator {
     div.innerText = `Best score: ${this.bestScore}`;
   }
 
-  consume() {
+  consume(dt:number) {
     const player = this.player;
+    const chunk = player.r * dt;
     for (const a of this.universe.asteroids) {
       if (!player.isColliding(a)) continue;
       const [consuming, consumed] = (player.r > a.r) ? [player, a] : [a, player];
-      consuming.consume(consumed);
+      consuming.consume(consumed, chunk);
 
       if (a.r <= 0) deleteArrayItem(this.universe.asteroids, a);
     }

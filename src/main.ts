@@ -23,7 +23,7 @@ function animate(t:number) {
     universe.regenerate(Screen.getBoundingBox(), player, dt);
     universe.animate(dt);
     simulator.simulate(dt);
-    simulator.consume();
+    simulator.consume(dt);
     simulator.playForceSounds();
   }
   else {

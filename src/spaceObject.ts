@@ -37,11 +37,12 @@ export class SpaceObject {
     return this.r > 0;
   }
 
-  consume(o:SpaceObject) {
+  consume(o:SpaceObject, chunk:number) {
     const delta = .01 * o.r;
-    while (this.isColliding(o) && o.canBeReduced()) {
+    while (this.isColliding(o) && o.canBeReduced() && chunk > 0) {
       this.r += delta / this.r;
       o.r    -= delta / o.r;
+      chunk  -= delta;
     }
   }
 
