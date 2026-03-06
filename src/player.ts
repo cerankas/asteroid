@@ -5,31 +5,14 @@ export class Player extends SpaceObject {
   vx=0;
   vy=0;
 
-  maxR:number;
-  protectionTimer=0;
-
   constructor({x=0, y=0, r=1, hue=0} = {}) {
     super({x, y, r, hue});
-    this.maxR = r;
   }
 
   rescale(factor:number) {
     super.rescale(factor);
     this.vx *= factor;
     this.vy *= factor;
-    this.maxR *= factor;
-  }
-
-  canBeReduced() {
-    return super.canBeReduced() && this.r > this.maxR / 2 && !this.protectionTimer;
-  }
-
-  consume(o:SpaceObject, chunk:number) {
-    super.consume(o, chunk);
-    if (this.maxR < this.r) {
-      this.maxR = this.r;
-      this.protectionTimer = 0;
-    }
   }
 
   changeHue(delta:number) {
@@ -47,27 +30,5 @@ export class Player extends SpaceObject {
 
     this.vx -= this.vx * dt;
     this.vy -= this.vy * dt;
-
-    if (!this.canBeReduced() && !this.protectionTimer) {
-      this.protectionTimer = 10;
-      this.maxR = this.r;
-    }
-
-    if (this.protectionTimer) {
-      this.protectionTimer -= dt;
-      if (this.protectionTimer <= 0) {
-        this.protectionTimer = 0;
-      }
-    }
-  }
-
-  draw(ctx:CanvasRenderingContext2D) {
-    if (this.protectionTimer) {
-      super.draw(ctx, 'white');
-      super.draw(ctx, '', this.r * (1 - this.protectionTimer / 10));
-    }
-    else {
-      super.draw(ctx);
-    }
   }
 }

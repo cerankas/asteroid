@@ -100,7 +100,7 @@ export class Simulator {
 
   consume(dt:number) {
     const player = this.player;
-    const chunk = player.r * dt;
+    const chunk = player.r**2 * dt / 2;
     for (const a of this.universe.asteroids) {
       if (!player.isColliding(a)) continue;
       const [consuming, consumed] = (player.r > a.r) ? [player, a] : [a, player];
